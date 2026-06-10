@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>高科大重大永續議題調查</title><link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header><div class="wrap"><span class="badge">NKUST Sustainability Survey</span><h1>115年國立高雄科技大學重大永續議題調查</h1><p>請依您的身分選擇問卷版本。填答資料僅供重大議題鑑別、永續治理與永續報告書分析使用。</p></div></header>
+<main class="wrap">
+<section id="home" class="card"><h2>請選擇問卷版本</h2><div class="choices"><button onclick="start('stakeholder')"><b>互動關係人問卷</b><span>適用學生、教師、職員、校友、家長、政府機關、業界夥伴、教育夥伴、社會大眾等。</span></button><button onclick="start('executive')"><b>管理階層問卷</b><span>適用校長級、副校長級、一級主管、二級主管，評估營運衝擊、風險與機會。</span></button></div></section>
+<form id="form" class="card hide">
+<button type="button" class="back" onclick="back()">← 回問卷選擇</button><h2 id="title"></h2><p id="desc" class="muted"></p>
+<section><h3>基本資料</h3><div id="basic"></div></section>
+<section><h3>四大永續面向重要程度</h3><p class="hint">1=非常不重要；5=非常重要</p><div id="dims"></div></section>
+<section id="stakeholder" class="hide"><h3>25項重大永續議題關注程度</h3><p class="hint">請依據您對「高科大推動該議題之關注程度」評分。1=非常不關注；5=非常關注。</p><div id="concern"></div><h3>優先議題選擇</h3><p class="hint">請選出您認為最重要的三項重大永續議題（最多3項）。</p><div id="top3" class="checks"></div></section>
+<section id="executive" class="hide"><h3>重大永續議題營運衝擊評估</h3><h4>A. 發生可能性</h4><p class="hint">未來三至五年內，該議題影響高科大的可能性。1=非常低；5=非常高。</p><div id="likelihood"></div><h4>B. 若處理不善之負向衝擊程度</h4><p class="hint">若學校未妥善管理該議題，對校務營運之負面影響程度。1=非常低；5=非常高。</p><div id="negative"></div><h4>C. 若有效推動之正向效益程度</h4><p class="hint">若學校有效推動該議題，對校務營運之正面效益程度。1=非常低；5=非常高。</p><div id="positive"></div><h3>策略優先議題</h3><p class="hint">請選出未來三年最需要優先投入資源的五項重大永續議題（最多5項）。</p><div id="top5" class="checks"></div></section>
+<section><h3>開放意見</h3><textarea name="open_comment" rows="5" placeholder="請輸入您的建議"></textarea></section>
+<div class="actions"><button class="primary" type="submit">送出問卷</button><button type="button" onclick="downloadJson()">下載測試JSON</button></div><p id="msg"></p>
+</form></main><footer>國立高雄科技大學｜永續發展處校務大數據分析中心</footer>
+<script>
+const ITEMS=[{"group": "MG", "code": "q01_finance", "label": "財務治理與績效"}, {"group": "MG", "code": "q02_osh", "label": "職業安全衛生管理"}, {"group": "MG", "code": "q03_strategy", "label": "永續發展策略"}, {"group": "MG", "code": "q04_hr", "label": "人員招募與薪酬福利"}, {"group": "MG", "code": "q05_supply", "label": "採購與供應鏈管理"}, {"group": "MG", "code": "q06_compliance", "label": "法規遵循"}, {"group": "MG", "code": "q07_gender", "label": "性別平等及人權"}, {"group": "MG", "code": "q08_risk", "label": "內部控制與風險管理"}, {"group": "MG", "code": "q09_ethics", "label": "學術與廉政倫理"}, {"group": "EP", "code": "q10_carbon", "label": "碳管理及淨零碳排"}, {"group": "EP", "code": "q11_info", "label": "資訊安全"}, {"group": "EP", "code": "q12_air", "label": "環境空氣品質監控"}, {"group": "EP", "code": "q13_waste", "label": "廢棄物管理"}, {"group": "EP", "code": "q14_energy", "label": "能源管理及多元化"}, {"group": "EP", "code": "q15_climate", "label": "氣候承諾"}, {"group": "EP", "code": "q16_water", "label": "水資源管理"}, {"group": "EP", "code": "q17_ecology", "label": "校園生態與環境保護"}, {"group": "RT", "code": "q18_teaching", "label": "教學品保與評鑑"}, {"group": "RT", "code": "q19_student", "label": "學生助學與輔導"}, {"group": "RT", "code": "q20_career", "label": "職涯輔導與校友流向"}, {"group": "RT", "code": "q21_research", "label": "研究、創新與產學合作"}, {"group": "PC", "code": "q22_community", "label": "社區參與及在地關懷"}, {"group": "PC", "code": "q23_usr", "label": "大學社會責任"}, {"group": "PC", "code": "q24_global", "label": "國際鏈結及合作"}, {"group": "PC", "code": "q25_product", "label": "產品設計與生命週期管理"}];const GROUPS={"MG": "經營管理", "EP": "環境保護", "RT": "研究教學", "PC": "鏈結合作"};let mode=null;
+const GOOGLE_APPS_SCRIPT_URL=""; // 部署後貼上 Web App URL
+function start(m){mode=m;home.classList.add('hide');form.classList.remove('hide');setup();scrollTo(0,0)}
+function back(){form.reset();form.classList.add('hide');home.classList.remove('hide')}
+function setup(){title.textContent=mode==='stakeholder'?'115年國立高雄科技大學互動關係人重大永續議題關注度調查':'115年國立高雄科技大學學校管理階層重大永續議題營運衝擊評估問卷';desc.textContent=mode==='stakeholder'?'本問卷蒐集各互動關係人對本校重大永續議題之關注程度。':'本問卷蒐集管理階層對重大永續議題之營運衝擊、風險與機會評估。';basic.innerHTML=mode==='stakeholder'?stakeholderBasic():execBasic();dims.innerHTML=matrix([['dim_mg','經營管理'],['dim_ep','環境保護'],['dim_rt','研究教學'],['dim_pc','鏈結合作']],['1','2','3','4','5']);stakeholder.classList.toggle('hide',mode!=='stakeholder');executive.classList.toggle('hide',mode!=='executive');if(mode==='stakeholder'){concern.innerHTML=byGroup('concern');top3.innerHTML=topList('top3',3)}else{likelihood.innerHTML=byGroup('likelihood');negative.innerHTML=byGroup('negative');positive.innerHTML=byGroup('positive');top5.innerHTML=topList('top5',5)}}
+function stakeholderBasic(){return `<label>您與高科大的關係<select name="stakeholder_type" required><option value="">請選擇</option><option value="student">學生</option><option value="faculty">教師</option><option value="staff">職員</option><option value="alumni">校友</option><option value="parent">學生家長</option><option value="government">政府機關</option><option value="industry_partner">業界夥伴</option><option value="education_partner">教育夥伴</option><option value="public">社會大眾</option><option value="other">其他</option></select></label>`}
+function execBasic(){return `<label>職務層級<select name="exec_level" required><option value="">請選擇</option><option value="president">校長級</option><option value="vice_president">副校長級</option><option value="level_1">一級主管</option><option value="level_2">二級主管</option></select></label>`}
+function byGroup(prefix){let h='';Object.keys(GROUPS).forEach(g=>{h+=`<h4>${GROUPS[g]}</h4>`;h+=matrix(ITEMS.filter(x=>x.group===g).map(x=>[`${prefix}_${x.code}`,x.label]),['1','2','3','4','5'])});return h}
+function matrix(rows,cols){let h='<div class="table"><table><tr><th>題項</th>'+cols.map(c=>`<th>${c}</th>`).join('')+'</tr>';rows.forEach(r=>{h+=`<tr><td>${r[1]}</td>`+cols.map((c,i)=>`<td><input required type="radio" name="${r[0]}" value="${i+1}"></td>`).join('')+'</tr>'});return h+'</table></div>'}
+function topList(name,max){return ITEMS.map(x=>`<label><input type="checkbox" name="${name}" value="${x.code}" onchange="limit('${name}',${max})"> ${x.label}</label>`).join('')}
+function limit(name,max){let a=[...document.querySelectorAll(`input[name="${name}"]:checked`)];if(a.length>max){a.at(-1).checked=false;alert(`最多只能選擇${max}項`)}}
+function collect(){let fd=new FormData(form),d={mode,submitted_at:new Date().toISOString()};for(let [k,v] of fd.entries()){d[k]=d[k]?([].concat(d[k],v)):v}return d}
+form.addEventListener('submit',async e=>{e.preventDefault();let data=collect();if(!GOOGLE_APPS_SCRIPT_URL){localStorage.setItem('nkust_last_response',JSON.stringify(data));msg.textContent='測試模式：尚未設定後端網址，資料已暫存在本機。';return}await fetch(GOOGLE_APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(data)});msg.textContent='已送出，感謝您的填答。';form.reset()});
+function downloadJson(){let b=new Blob([JSON.stringify(collect(),null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='nkust_survey_response.json';a.click()}
+</script></body></html>
