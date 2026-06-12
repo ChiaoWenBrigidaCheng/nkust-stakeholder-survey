@@ -4,84 +4,46 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>115年國立高雄科技大學重大永續議題調查</title>
-  <link rel="stylesheet" href="styles.css">
   <style>
-    .landing-wrap {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px 16px 48px;
+    body {
+      margin: 0;
+      background: #f4faf4;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
       text-align: center;
     }
-
-    .landing-banner {
+    .banner {
       width: 100%;
-      max-width: 1200px;
-      border-radius: 22px;
-      box-shadow: 0 12px 36px rgba(0,0,0,.16);
+      max-width: 1400px;
       display: block;
-      margin: 0 auto 28px;
+      margin: 0 auto;
     }
-
-    .landing-buttons {
+    .buttons {
+      margin: 28px auto 40px;
       display: flex;
       justify-content: center;
-      gap: 18px;
+      gap: 20px;
       flex-wrap: wrap;
-      margin-top: 24px;
     }
-
-    .landing-btn {
-      display: inline-block;
+    .btn {
       background: #166534;
       color: white;
       text-decoration: none;
-      padding: 16px 34px;
+      padding: 16px 36px;
       border-radius: 999px;
       font-size: 22px;
       font-weight: 700;
-      box-shadow: 0 8px 22px rgba(22,101,52,.25);
     }
-
-    .landing-btn.secondary {
+    .btn.management {
       background: #0f766e;
-    }
-
-    .landing-note {
-      color: #54665a;
-      margin-top: 18px;
-      font-size: 15px;
-    }
-
-    @media (max-width: 720px) {
-      .landing-wrap {
-        padding: 12px 10px 36px;
-      }
-
-      .landing-banner {
-        border-radius: 14px;
-      }
-
-      .landing-btn {
-        width: 100%;
-        font-size: 19px;
-        padding: 14px 20px;
-      }
     }
   </style>
 </head>
-
 <body>
-  <main class="landing-wrap">
-    <img src="banner.png" alt="115年國立高雄科技大學重大永續議題調查" class="landing-banner">
+  <img src="banner.png" class="banner" alt="115年國立高雄科技大學重大永續議題調查">
 
-    <div class="landing-buttons">
-      <a href="stakeholder.html" class="landing-btn">進入互動關係人問卷</a>
-      <a href="management.html" class="landing-btn secondary">進入管理階層問卷</a>
-    </div>
-
-    <p class="landing-note">
-      永續發展處校務大數據分析組｜聯絡信箱：etoffice01@nkust.edu.tw
-    </p>
-  </main>
+  <div class="buttons">
+    <a class="btn" href="stakeholder.html">進入互動關係人問卷</a>
+    <a class="btn management" href="management.html">進入管理階層問卷</a>
+  </div>
 </body>
 </html>
