@@ -109,3 +109,34 @@ footer{text-align:center;color:#54665a;padding:28px 12px}
     font-weight:900 !important;
   }
 }
+/* 手機版量表數字顯示修正 */
+@media (max-width:768px){
+
+  .table td:nth-child(2)::before{
+    content:"1" !important;
+  }
+
+  .table td:nth-child(3)::before{
+    content:"2" !important;
+  }
+
+  .table td:nth-child(4)::before{
+    content:"3" !important;
+  }
+
+  .table td:nth-child(5)::before{
+    content:"4" !important;
+  }
+
+  .table td:nth-child(6)::before{
+    content:"5" !important;
+  }
+
+  .table td:not(:first-child)::before{
+    display:inline-block !important;
+    min-width:28px !important;
+    font-weight:800 !important;
+    color:#166534 !important;
+    font-size:18px !important;
+  }
+}
