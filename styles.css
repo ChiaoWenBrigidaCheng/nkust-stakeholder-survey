@@ -17,6 +17,20 @@ body{margin:0;background:var(--g50);color:var(--text);font-family:-apple-system,
 .intro{background:linear-gradient(180deg,#fff,#f7fcf8);border-left:7px solid var(--g600)}
 section{border-top:1px solid var(--line);margin-top:24px;padding-top:18px}
 .muted,.hint{color:#5f7163}
+
+/* 題目前方填答說明：網頁版與手機版都以醒目色呈現 */
+section h3 + .hint{
+  background:#fff8e6;
+  border:2px solid #f2cf75;
+  border-left:7px solid #f59e0b;
+  color:#8a4b00;
+  font-weight:800;
+  padding:14px 16px;
+  border-radius:14px;
+  margin:14px 0 18px;
+  box-shadow:0 6px 18px rgba(183,121,31,.08);
+}
+
 .lottery-callout,.highlight-note{background:var(--gold-bg);border:2px solid #f2cf75;border-radius:16px;padding:16px 18px;margin:18px 0;color:#5f3b00;box-shadow:0 8px 20px rgba(183,121,31,.08)}
 .lottery-callout strong,.highlight-note strong{display:block;font-size:21px;color:#8a4b00;margin-bottom:4px}
 label{display:block;margin:10px 0;font-weight:600}
@@ -44,11 +58,15 @@ footer{text-align:center;color:#54665a;padding:28px 12px}
 @media(max-width:860px){.survey-brand{flex-direction:column;gap:12px;text-align:center}.survey-logo{width:210px}.survey-title{font-size:clamp(20px,5vw,30px)}}
 @media(max-width:720px){.start-btn{width:calc(100% - 32px);font-size:20px}.landing-banner{border-radius:0 0 14px 14px}.radio-row{grid-template-columns:1fr}.card{padding:16px;border-radius:14px;margin:18px 10px}table{min-width:560px}.survey-logo{width:190px}}
 
-/* 手機版量表優化：答題說明已在題目前方，選項只顯示數值 */
+/* 手機版量表優化：移除表頭空白框；選項只顯示數值 */
 @media (max-width:768px){
   .table{border:none;overflow-x:visible;background:transparent}
   .table table,.table tbody,.table tr,.table td,.table th{display:block;width:100%}
   .table table{min-width:0;border-collapse:separate;background:transparent}
+
+  /* 修正：隱藏表頭列，避免手機版出現紅框所示的空白橢圓框 */
+  .table tr:first-child{display:none}
+
   .table tr{margin-bottom:18px;padding:14px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 4px 14px rgba(15,23,42,.06)}
   .table th{display:none}
   .table td{border:none;padding:8px 0;text-align:left}
