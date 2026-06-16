@@ -64,18 +64,48 @@ footer{text-align:center;color:#54665a;padding:28px 12px}
   .table table,.table tbody,.table tr,.table td,.table th{display:block;width:100%}
   .table table{min-width:0;border-collapse:separate;background:transparent}
 
-  /* 修正：隱藏表頭列，避免手機版出現紅框所示的空白橢圓框 */
-  .table tr:first-child{display:none}
+/* === 手機版量表空白橢圓框最終修正：請放在 styles.css 最底部 === */
+@media (max-width:768px){
 
-  .table tr{margin-bottom:18px;padding:14px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 4px 14px rgba(15,23,42,.06)}
-  .table th{display:none}
-  .table td{border:none;padding:8px 0;text-align:left}
-  .table td:first-child{font-weight:800;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--line);min-width:0}
-  .table td:not(:first-child){display:flex;align-items:center;gap:12px;min-height:42px;border-radius:10px;padding:8px 10px;background:#f8fcf8;margin:6px 0}
-  .table td:nth-child(2)::before{content:"1";font-weight:800;color:#35543c;min-width:24px}
-  .table td:nth-child(3)::before{content:"2";font-weight:800;color:#35543c;min-width:24px}
-  .table td:nth-child(4)::before{content:"3";font-weight:800;color:#35543c;min-width:24px}
-  .table td:nth-child(5)::before{content:"4";font-weight:800;color:#35543c;min-width:24px}
-  .table td:nth-child(6)::before{content:"5";font-weight:800;color:#35543c;min-width:24px}
-  .table input[type=radio]{width:24px;height:24px;margin:0}
+  /* 隱藏由 table header 造成的空白列 */
+  .table table > tbody > tr:first-child,
+  .table table > tr:first-child,
+  .table tr:has(th){
+    display:none !important;
+    height:0 !important;
+    min-height:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+    box-shadow:none !important;
+    background:transparent !important;
+  }
+
+  .table th{
+    display:none !important;
+  }
+
+  /* 防止表格本身在手機版留下橢圓外框 */
+  .table,
+  .table table,
+  .table tbody{
+    border:0 !important;
+    box-shadow:none !important;
+    background:transparent !important;
+  }
+
+  /* 分類標題直接顯示，不要像輸入框 */
+  #concern h4,
+  #impact h4{
+    display:block !important;
+    background:transparent !important;
+    border:0 !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
+    padding:0 !important;
+    margin:20px 0 10px !important;
+    color:#166534 !important;
+    font-size:18px !important;
+    font-weight:900 !important;
+  }
 }
