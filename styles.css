@@ -30,7 +30,7 @@ body::before {
     radial-gradient(circle, rgba(187,247,208,.7) 1px, transparent 1.4px);
   background-size: 38px 38px, 72px 72px, 118px 118px;
   opacity: .36;
-  animation: starDrift 18s linear infinite;
+  animation: starDrift 8s linear infinite;
 }
 
 body::after {
