@@ -1,33 +1,74 @@
-# 管理階層問卷 Landing Page－QR Code 位置修正版
-
-## 修正內容
-
-本版不再以完整白色卡片覆蓋 Banner 右側區域，而是只覆蓋原 PNG 中 QR Code 的方形範圍。
-
-因此：
-
-- QR Code 會對準既有白色方框。
-- 下方綠色「掃描 QR Code／填寫問卷」區塊保留原 PNG。
-- 「管理階層問卷」及 `management.html` 標示保留原 PNG。
-- 不會再發生整張 QR 卡片向左、向上或超出外框。
-- QR Code 仍會自動連結同一資料夾內的 `management.html`。
+# 管理階層問卷 Landing Page
 
 ## 必要檔案
 
+請將下列三個檔案放在 GitHub Pages repository 的同一資料夾：
+
 ```text
 management-landing.html
-management-banner-management.png
+management-banner-management-final-v5.png
 management.html
 ```
 
-## 上傳方式
+## 本次最終處理方式
 
-1. 將 `management-landing-position-fixed.html` 改名為 `management-landing.html`。
-2. 覆蓋 GitHub repository 中原本的 Landing Page。
-3. 確認 `management-banner-management.png` 與 `management.html` 位於同一資料夾。
-4. Commit 並 Push。
-5. 等候 GitHub Pages 更新後，以 `Ctrl + F5` 或無痕視窗重新測試。
+1. QR Code 已直接寫入 PNG，不再由 HTML 疊加。
+2. QR Code 編碼的正式網址為：
 
-## 測試提醒
+```text
+https://chiaowenbrigidacheng.github.io/nkust-stakeholder-survey/management.html
+```
 
-QR Code 必須在 GitHub Pages 正式網址上測試。若直接以 `file:///` 開啟本機 HTML，QR Code 會指向本機檔案路徑，手機無法使用。
+3. HTML 不使用：
+   - JavaScript
+   - 動態 QR Code
+   - 絕對定位
+   - 覆蓋圖層
+   - Base64 圖片
+4. QR Code 會隨整張 PNG 等比例縮放，不會再偏移。
+5. 整張 Banner 可點擊並進入 `management.html`。
+6. 下方保留獨立的「開始填答」按鈕。
+
+## GitHub 上傳步驟
+
+1. 將下載的 HTML 改名為：
+
+```text
+management-landing.html
+```
+
+2. 上傳：
+
+```text
+management-banner-management-final-v5.png
+```
+
+3. 確認同一資料夾內已有：
+
+```text
+management.html
+```
+
+4. Commit 並 Push origin。
+5. 等候 GitHub Pages 更新。
+6. 使用無痕視窗或 `Ctrl + F5` 測試。
+
+## 檔案路徑
+
+HTML 目前指定：
+
+```html
+src="management-banner-management-final-v5.png"
+```
+
+若更改 PNG 檔名，必須同步修改 HTML 的 `src`。
+
+## 測試項目
+
+- Banner 正常顯示。
+- QR Code 位於原本白色框內。
+- QR Code 沒有重疊或偏移。
+- 手機掃描後開啟：
+  `https://chiaowenbrigidacheng.github.io/nkust-stakeholder-survey/management.html`
+- 點擊整張 Banner 可進入 `management.html`。
+- 點擊下方「開始填答」可進入 `management.html`。

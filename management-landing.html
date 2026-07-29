@@ -4,15 +4,35 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>管理階層重大永續議題調查</title>
-  <style>
-    * { box-sizing: border-box; }
 
-    html, body {
+  <style>
+    :root {
+      --page-bg: #f4faf4;
+      --green-dark: #064a2a;
+      --green-light: #167a45;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
       margin: 0;
       width: 100%;
-      background: #f4faf4;
-      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC",
-        "Microsoft JhengHei", "Segoe UI", sans-serif;
+      min-height: 100%;
+      background: var(--page-bg);
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Noto Sans TC",
+        "Microsoft JhengHei",
+        "Segoe UI",
+        sans-serif;
+    }
+
+    body {
+      overflow-x: hidden;
     }
 
     .page {
@@ -20,60 +40,25 @@
       text-align: center;
     }
 
-    .banner-wrap {
-      position: relative;
+    .banner-link {
+      display: block;
       width: 100%;
       max-width: 1448px;
       margin: 0 auto;
+      text-decoration: none;
     }
 
     .banner {
       display: block;
       width: 100%;
       height: auto;
-    }
-
-    /*
-      精準對準 management-banner-management-clean.png 的 QR 白色區域。
-      原圖尺寸：1448 × 925 px
-      QR 區域：x=1148, y=596, w=180, h=180
-    */
-    .qr-link {
-      position: absolute;
-      left: 79.2818%;
-      top: 64.4324%;
-      width: 12.4309%;
-      aspect-ratio: 1 / 1;
-      display: block;
       margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background: #fff;
-      text-decoration: none;
-      z-index: 3;
-    }
-
-    #qrCode,
-    #qrCode canvas,
-    #qrCode img {
-      display: block;
-      width: 100% !important;
-      height: 100% !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      image-rendering: pixelated;
     }
 
     .button-area {
-      padding: 18px 16px 30px;
-    }
-
-    .button-title {
-      margin: 0 0 8px;
-      color: #173f2c;
-      font-size: 21px;
-      font-weight: 800;
-      letter-spacing: .08em;
+      display: flex;
+      justify-content: center;
+      padding: 20px 16px 32px;
     }
 
     .start-button {
@@ -81,15 +66,22 @@
       align-items: center;
       justify-content: center;
       min-width: 360px;
-      padding: 14px 36px;
+      padding: 14px 38px;
       border-radius: 999px;
-      background: linear-gradient(180deg, #167a45 0%, #064a2a 100%);
+      background: linear-gradient(
+        180deg,
+        var(--green-light) 0%,
+        var(--green-dark) 100%
+      );
       color: #fff;
       text-decoration: none;
       font-size: 23px;
       font-weight: 800;
-      letter-spacing: .08em;
-      box-shadow: 0 8px 20px rgba(11, 77, 42, .25);
+      letter-spacing: 0.08em;
+      box-shadow: 0 8px 20px rgba(11, 77, 42, 0.25);
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
     }
 
     .start-button::after {
@@ -102,11 +94,13 @@
     .start-button:hover,
     .start-button:focus-visible {
       transform: translateY(-2px);
-      box-shadow: 0 11px 24px rgba(11, 77, 42, .33);
+      box-shadow: 0 11px 24px rgba(11, 77, 42, 0.33);
     }
 
     @media (max-width: 600px) {
-      .button-title { font-size: 17px; }
+      .button-area {
+        padding: 16px 14px 24px;
+      }
 
       .start-button {
         width: min(100%, 360px);
@@ -114,52 +108,32 @@
         padding: 13px 22px;
         font-size: 19px;
       }
+
+      .start-button::after {
+        margin-left: 14px;
+        font-size: 30px;
+      }
     }
   </style>
 </head>
+
 <body>
   <main class="page">
-    <div class="banner-wrap">
+    <a
+      class="banner-link"
+      href="management.html"
+      aria-label="前往管理階層問卷"
+    >
       <img
         class="banner"
-        src="management-banner-management-clean.png?v=3"
+        src="management-banner-management-final-v5.png"
         alt="115年國立高雄科技大學重大永續議題調查－管理階層問卷"
       >
-
-      <a
-        id="qrLink"
-        class="qr-link"
-        href="management.html"
-        aria-label="掃描或點選進入管理階層問卷"
-      >
-        <div id="qrCode"></div>
-      </a>
-    </div>
+    </a>
 
     <div class="button-area">
-      <p class="button-title">管理階層問卷</p>
       <a class="start-button" href="management.html">開始填答</a>
     </div>
   </main>
-
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-  <script>
-    (function () {
-      const target = new URL("management.html", window.location.href).href;
-      const qrLink = document.getElementById("qrLink");
-      const qrCode = document.getElementById("qrCode");
-
-      qrLink.href = target;
-
-      new QRCode(qrCode, {
-        text: target,
-        width: 360,
-        height: 360,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.M
-      });
-    })();
-  </script>
 </body>
 </html>
