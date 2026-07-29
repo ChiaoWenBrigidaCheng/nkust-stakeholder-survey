@@ -43,12 +43,21 @@ const CLIMATE_ITEMS = [
   ["o4_green_collab","O4_綠色技術與產學合作 (Green Technology and Industry Collaboration)"],
   ["o5_reputation","O5_提升永續聲譽、評比與招生吸引力 (Enhanced Sustainability Reputation, Rankings and Enrollment Appeal)"]
 ];
+function doGet(e){
+  return jsonOutput({
+    status:"ok",
+    service:"NKUST stakeholder survey endpoint",
+    message:"Endpoint is running. Survey submissions use POST."
+  });
+}
 function doPost(e){
   let ss;
   let data={};
+  const raw=(e&&e.postData&&e.postData.contents)||"";
   try{
-    data=JSON.parse((e.postData&&e.postData.contents)||"{}");
+    data=JSON.parse(raw||"{}");
     ss=SpreadsheetApp.openById(SHEET_ID);
+    writeRequestLog(ss,data,raw);
     if(data.mode==="management_v2")writeManagementV2(ss,data);
     else if(data.mode==="stakeholder_v2")writeStakeholderV2(ss,data);
     else throw new Error("未知的問卷模式："+(data.mode||""));
@@ -56,7 +65,7 @@ function doPost(e){
   }catch(err){
     try{
       if(!ss)ss=SpreadsheetApp.openById(SHEET_ID);
-      writeSubmitError(ss,data,err);
+      writeSubmitError(ss,data,err,raw);
     }catch(logErr){}
     return jsonOutput({status:"error",message:String(err&&err.message||err)});
   }
@@ -66,4 +75,6 @@ function writeManagementV2(ss,data){const sheet=getSheet(ss,"管理階層問卷_
 function getSheet(ss,name){let sheet=ss.getSheetByName(name);if(!sheet)sheet=ss.insertSheet(name);return sheet;}
 function ensureHeaders(sheet,headers){if(sheet.getLastRow()===0){sheet.appendRow(headers);sheet.setFrozenRows(1);return;}const lastColumn=Math.max(sheet.getLastColumn(),headers.length);const current=sheet.getRange(1,1,1,lastColumn).getValues()[0];const same=headers.every((h,i)=>current[i]===h);if(!same){sheet.getRange(1,1,1,headers.length).setValues([headers]);if(lastColumn>headers.length)sheet.getRange(1,headers.length+1,1,lastColumn-headers.length).clearContent();}if(sheet.getFrozenRows()<1)sheet.setFrozenRows(1);}
 function jsonOutput(payload){return ContentService.createTextOutput(JSON.stringify(payload)).setMimeType(ContentService.MimeType.JSON);}
-function writeSubmitError(ss,data,err){const sheet=getSheet(ss,"送出錯誤_LOG");ensureHeaders(sheet,["時間","問卷模式","錯誤訊息","原始資料"]);sheet.appendRow([new Date(),data&&data.mode||"",String(err&&err.stack||err),JSON.stringify(data||{})]);}
+function writeRequestLog(ss,data,raw){const sheet=getSheet(ss,"送出接收_LOG");ensureHeaders(sheet,["時間","問卷模式","問卷版本","原始資料長度"]);sheet.appendRow([new Date(),data&&data.mode||"",data&&data.survey_version||"",raw.length]);}
+function writeSubmitError(ss,data,err,raw){const sheet=getSheet(ss,"送出錯誤_LOG");ensureHeaders(sheet,["時間","問卷模式","錯誤訊息","原始資料"]);sheet.appendRow([new Date(),data&&data.mode||"",String(err&&err.stack||err),raw||JSON.stringify(data||{})]);}
+function debugWriteTest(){const ss=SpreadsheetApp.openById(SHEET_ID);const sheet=getSheet(ss,"送出測試_LOG");ensureHeaders(sheet,["時間","測試項目","結果"]);sheet.appendRow([new Date(),"debugWriteTest","ok"]);return "ok";}
