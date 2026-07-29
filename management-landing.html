@@ -4,20 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>管理階層重大永續議題調查</title>
-
   <style>
     * { box-sizing: border-box; }
-
-    :root {
-      --green-dark: #064a2a;
-      --green-light: #167a45;
-      --page-bg: #f4faf4;
-    }
 
     html, body {
       margin: 0;
       width: 100%;
-      background: var(--page-bg);
+      background: #f4faf4;
       font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC",
         "Microsoft JhengHei", "Segoe UI", sans-serif;
     }
@@ -41,78 +34,34 @@
     }
 
     /*
-      以完整白色卡片覆蓋 PNG 內原本無法掃描的 QR Code。
-      位置依 1448 × 925 的 Banner 比例設定，縮放時會同步縮放。
+      精準對準 management-banner-management-clean.png 的 QR 白色區域。
+      原圖尺寸：1448 × 925 px
+      QR 區域：x=1148, y=596, w=180, h=180
     */
-    .qr-card {
+    .qr-link {
       position: absolute;
-      left: 75.20%;
-      top: 61.85%;
-      width: 16.15%;
-      height: 34.60%;
-      padding: 0.80%;
-      overflow: hidden;
-      border: 1px solid #8ca797;
-      border-radius: 1.1vw;
-      background: #ffffff;
-      box-shadow: 0 4px 12px rgba(6, 74, 42, 0.12);
-      text-decoration: none;
-    }
-
-    .qr-code {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
+      left: 79.2818%;
+      top: 64.4324%;
+      width: 12.4309%;
       aspect-ratio: 1 / 1;
+      display: block;
+      margin: 0;
+      padding: 0;
       overflow: hidden;
-      background: #ffffff;
+      background: #fff;
+      text-decoration: none;
+      z-index: 3;
     }
 
-    .qr-code img,
-    .qr-code canvas {
+    #qrCode,
+    #qrCode canvas,
+    #qrCode img {
       display: block;
       width: 100% !important;
-      height: auto !important;
+      height: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
       image-rendering: pixelated;
-    }
-
-    .qr-heading {
-      margin: 5px -6% 0;
-      padding: 5px 2px;
-      background: var(--green-dark);
-      color: #ffffff;
-      font-size: clamp(8px, 1.25vw, 18px);
-      font-weight: 900;
-      line-height: 1.25;
-    }
-
-    .qr-label {
-      margin: 5px 0 3px;
-      color: #214b35;
-      font-size: clamp(7px, 0.93vw, 14px);
-      font-weight: 800;
-      line-height: 1.25;
-    }
-
-    .qr-file {
-      display: block;
-      width: 88%;
-      margin: 0 auto;
-      padding: 1px 5px;
-      border-radius: 999px;
-      background: var(--green-dark);
-      color: #ffffff;
-      font-size: clamp(6px, 0.72vw, 11px);
-      font-weight: 700;
-      line-height: 1.3;
-    }
-
-    .qr-fallback {
-      padding: 12px 6px;
-      color: #214b35;
-      font-size: 12px;
-      line-height: 1.4;
     }
 
     .button-area {
@@ -134,8 +83,8 @@
       min-width: 360px;
       padding: 14px 36px;
       border-radius: 999px;
-      background: linear-gradient(180deg, var(--green-light), var(--green-dark));
-      color: #ffffff;
+      background: linear-gradient(180deg, #167a45 0%, #064a2a 100%);
+      color: #fff;
       text-decoration: none;
       font-size: 23px;
       font-weight: 800;
@@ -157,24 +106,7 @@
     }
 
     @media (max-width: 600px) {
-      .qr-card {
-        border-radius: 5px;
-        border-width: .5px;
-        box-shadow: none;
-      }
-
-      .qr-heading {
-        margin-top: 2px;
-        padding: 2px 1px;
-      }
-
-      .qr-label {
-        margin: 2px 0 1px;
-      }
-
-      .button-title {
-        font-size: 17px;
-      }
+      .button-title { font-size: 17px; }
 
       .start-button {
         width: min(100%, 360px);
@@ -185,26 +117,22 @@
     }
   </style>
 </head>
-
 <body>
   <main class="page">
     <div class="banner-wrap">
       <img
         class="banner"
-        src="management-banner-management.png"
+        src="management-banner-management-clean.png?v=3"
         alt="115年國立高雄科技大學重大永續議題調查－管理階層問卷"
       >
 
       <a
         id="qrLink"
-        class="qr-card"
+        class="qr-link"
         href="management.html"
         aria-label="掃描或點選進入管理階層問卷"
       >
-        <div id="qrCode" class="qr-code"></div>
-        <div class="qr-heading">掃描 QR Code<br>填寫問卷</div>
-        <div class="qr-label">管理階層問卷</div>
-        <span class="qr-file">management.html</span>
+        <div id="qrCode"></div>
       </a>
     </div>
 
@@ -217,26 +145,19 @@
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <script>
     (function () {
-      const qrHolder = document.getElementById("qrCode");
+      const target = new URL("management.html", window.location.href).href;
       const qrLink = document.getElementById("qrLink");
+      const qrCode = document.getElementById("qrCode");
 
-      // 依目前 Landing Page 的網址，自動取得同一資料夾內 management.html 的完整網址。
-      const managementUrl = new URL("management.html", window.location.href).href;
-      qrLink.href = managementUrl;
+      qrLink.href = target;
 
-      if (typeof QRCode === "undefined") {
-        qrHolder.innerHTML =
-          '<div class="qr-fallback">QR Code 載入失敗，請點選此區塊或下方「開始填答」。</div>';
-        return;
-      }
-
-      new QRCode(qrHolder, {
-        text: managementUrl,
-        width: 320,
-        height: 320,
+      new QRCode(qrCode, {
+        text: target,
+        width: 360,
+        height: 360,
         colorDark: "#000000",
         colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
+        correctLevel: QRCode.CorrectLevel.M
       });
     })();
   </script>
