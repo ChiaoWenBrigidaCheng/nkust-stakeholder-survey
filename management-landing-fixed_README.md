@@ -1,106 +1,33 @@
-# 管理階層問卷 Landing Page 使用說明
+# 管理階層問卷 Landing Page－QR Code 位置修正版
+
+## 修正內容
+
+本版不再以完整白色卡片覆蓋 Banner 右側區域，而是只覆蓋原 PNG 中 QR Code 的方形範圍。
+
+因此：
+
+- QR Code 會對準既有白色方框。
+- 下方綠色「掃描 QR Code／填寫問卷」區塊保留原 PNG。
+- 「管理階層問卷」及 `management.html` 標示保留原 PNG。
+- 不會再發生整張 QR 卡片向左、向上或超出外框。
+- QR Code 仍會自動連結同一資料夾內的 `management.html`。
 
 ## 必要檔案
 
-請將下列三個檔案放在 GitHub Pages repository 的同一資料夾：
-
 ```text
 management-landing.html
 management-banner-management.png
 management.html
 ```
 
-## 本版 QR Code 的運作方式
+## 上傳方式
 
-本版不再使用 PNG 圖片內原本無法掃描的 QR Code。
+1. 將 `management-landing-position-fixed.html` 改名為 `management-landing.html`。
+2. 覆蓋 GitHub repository 中原本的 Landing Page。
+3. 確認 `management-banner-management.png` 與 `management.html` 位於同一資料夾。
+4. Commit 並 Push。
+5. 等候 GitHub Pages 更新後，以 `Ctrl + F5` 或無痕視窗重新測試。
 
-HTML 會在網頁開啟時，自動取得與 Landing Page 同一資料夾內的：
+## 測試提醒
 
-```text
-management.html
-```
-
-完整網址，再產生真正可掃描的 QR Code。
-
-例如 Landing Page 位於：
-
-```text
-https://帳號.github.io/專案名稱/management-landing.html
-```
-
-QR Code 會自動連到：
-
-```text
-https://帳號.github.io/專案名稱/management.html
-```
-
-因此不需要手動寫入 GitHub Pages 的完整網址。
-
-## QR Code 的其他功能
-
-- QR Code 可直接用手機掃描。
-- QR Code 整張卡片本身也可以點擊。
-- 下方「開始填答」按鈕同樣連到 `management.html`。
-- 若 QR Code 程式庫暫時無法載入，使用者仍可點擊 QR Code 卡片或下方按鈕進入問卷。
-
-## GitHub 上傳步驟
-
-1. 將下載的 HTML 命名為：
-
-```text
-management-landing.html
-```
-
-2. 上傳：
-
-```text
-management-banner-management.png
-```
-
-3. 確認同一資料夾內已有：
-
-```text
-management.html
-```
-
-4. 在 GitHub Desktop 的 Summary 可填：
-
-```text
-修正管理階層問卷 QR Code 連結
-```
-
-5. 點選 `Commit to main`。
-6. 點選 `Push origin`。
-7. 等候 GitHub Pages 更新。
-8. 使用 `Ctrl + F5` 或無痕視窗重新載入頁面。
-
-## 測試方式
-
-1. 先以電腦開啟正式 GitHub Pages Landing Page。
-2. 使用手機相機掃描 QR Code。
-3. 確認網址結尾為：
-
-```text
-/management.html
-```
-
-4. 確認可正常進入管理階層問卷。
-5. 再測試點擊下方「開始填答」按鈕。
-
-## 注意事項
-
-請勿直接在電腦中以：
-
-```text
-file:///...
-```
-
-方式開啟 Landing Page 後測試 QR Code。
-
-因為此時產生的 QR Code 會是電腦本機檔案路徑，手機無法開啟。必須在 GitHub Pages 正式網址上測試。
-
-本版使用的 QR Code 程式庫：
-
-```text
-https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js
-```
+QR Code 必須在 GitHub Pages 正式網址上測試。若直接以 `file:///` 開啟本機 HTML，QR Code 會指向本機檔案路徑，手機無法使用。
