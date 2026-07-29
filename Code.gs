@@ -43,8 +43,27 @@ const CLIMATE_ITEMS = [
   ["o4_green_collab","O4_綠色技術與產學合作 (Green Technology and Industry Collaboration)"],
   ["o5_reputation","O5_提升永續聲譽、評比與招生吸引力 (Enhanced Sustainability Reputation, Rankings and Enrollment Appeal)"]
 ];
-function doPost(e){const ss=SpreadsheetApp.openById(SHEET_ID);const data=JSON.parse(e.postData.contents);if(data.mode==="management_v2")writeManagementV2(ss,data);else writeStakeholderV2(ss,data);return ContentService.createTextOutput(JSON.stringify({status:"ok"})).setMimeType(ContentService.MimeType.JSON);}
+function doPost(e){
+  let ss;
+  let data={};
+  try{
+    data=JSON.parse((e.postData&&e.postData.contents)||"{}");
+    ss=SpreadsheetApp.openById(SHEET_ID);
+    if(data.mode==="management_v2")writeManagementV2(ss,data);
+    else if(data.mode==="stakeholder_v2")writeStakeholderV2(ss,data);
+    else throw new Error("未知的問卷模式："+(data.mode||""));
+    return jsonOutput({status:"ok"});
+  }catch(err){
+    try{
+      if(!ss)ss=SpreadsheetApp.openById(SHEET_ID);
+      writeSubmitError(ss,data,err);
+    }catch(logErr){}
+    return jsonOutput({status:"error",message:String(err&&err.message||err)});
+  }
+}
 function writeStakeholderV2(ss,data){const sheet=getSheet(ss,"互動關係人問卷_V2");const headers=["填答時間","問卷版本","互動關係人類別",...TOPICS.map(t=>t[1]),"是否參加抽獎","抽獎電子郵件","開放意見"];ensureHeaders(sheet,headers);sheet.appendRow([data.submitted_at_taipei||"",data.survey_version||"",data.stakeholder_type||"",...TOPICS.map(t=>data["concern_"+t[0]]||""),data.lottery||"",data.lottery_email||"",data.open_comment||""]);}
 function writeManagementV2(ss,data){const sheet=getSheet(ss,"管理階層問卷_V2");const climateHeaders=[];CLIMATE_ITEMS.forEach(t=>{climateHeaders.push(t[1]+"_發生或實現可能性");climateHeaders.push(t[1]+"_影響或效益程度");});const headers=["填答時間","問卷版本",...TOPICS.map(t=>t[1]),...climateHeaders,"開放意見"];ensureHeaders(sheet,headers);const climateValues=[];CLIMATE_ITEMS.forEach(t=>{climateValues.push(data["climate_likelihood_"+t[0]]||"");climateValues.push(data["climate_impact_"+t[0]]||"");});sheet.appendRow([data.submitted_at_taipei||"",data.survey_version||"",...TOPICS.map(t=>data["impact_"+t[0]]||""),...climateValues,data.open_comment||""]);}
 function getSheet(ss,name){let sheet=ss.getSheetByName(name);if(!sheet)sheet=ss.insertSheet(name);return sheet;}
-function ensureHeaders(sheet,headers){if(sheet.getLastRow()===0){sheet.appendRow(headers);sheet.setFrozenRows(1);return;}const current=sheet.getRange(1,1,1,Math.max(sheet.getLastColumn(),headers.length)).getValues()[0];const same=headers.every((h,i)=>current[i]===h);if(!same)throw new Error("工作表欄位與 V2 問卷不一致。請改用新的空白工作表。");}
+function ensureHeaders(sheet,headers){if(sheet.getLastRow()===0){sheet.appendRow(headers);sheet.setFrozenRows(1);return;}const lastColumn=Math.max(sheet.getLastColumn(),headers.length);const current=sheet.getRange(1,1,1,lastColumn).getValues()[0];const same=headers.every((h,i)=>current[i]===h);if(!same){sheet.getRange(1,1,1,headers.length).setValues([headers]);if(lastColumn>headers.length)sheet.getRange(1,headers.length+1,1,lastColumn-headers.length).clearContent();}if(sheet.getFrozenRows()<1)sheet.setFrozenRows(1);}
+function jsonOutput(payload){return ContentService.createTextOutput(JSON.stringify(payload)).setMimeType(ContentService.MimeType.JSON);}
+function writeSubmitError(ss,data,err){const sheet=getSheet(ss,"送出錯誤_LOG");ensureHeaders(sheet,["時間","問卷模式","錯誤訊息","原始資料"]);sheet.appendRow([new Date(),data&&data.mode||"",String(err&&err.stack||err),JSON.stringify(data||{})]);}
