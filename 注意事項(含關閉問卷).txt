@@ -1,0 +1,65 @@
+NKUST 重大永續議題調查－維護注意事項
+
+【一、問卷截止時】
+1. 不需要刪除 stakeholder.html。
+2. 不需要刪除 GitHub Pages 網站。
+3. 不需要修改 index.html 才能停止填答。
+4. 只需將 stakeholder.html 內：
+   const SURVEY_OPEN = true;
+   改為：
+   const SURVEY_OPEN = false;
+5. 上傳 GitHub 並 Commit 後，確認公開網址已顯示「本次問卷已截止」。
+
+【二、未來重新開放時】
+1. 將 SURVEY_OPEN 改回 true。
+2. 若為新年度，必須同步修改：
+   - 頁面上的調查年度
+   - SURVEY_VERSION
+   - submitKey
+3. submitKey 不可沿用前一年度，否則曾經填過舊問卷的同一裝置可能被判定為已填答。
+
+【三、入口網站 index.html】
+1. index.html 主要負責入口頁設計。
+2. 可自由更換 Banner、文字、按鈕、圖片或整體版型。
+3. 不建議把「真正的問卷開關」只放在 index.html。
+4. 即使未來入口網站整個重新設計，只要連結仍指向 stakeholder.html，即可正常使用。
+
+【四、資料與版本】
+1. 每次正式上線前先確認 SURVEY_VERSION 是否正確。
+2. 不同年度資料應有清楚版本識別，避免後續分析時混淆。
+3. 不要隨意更改題目欄位名稱或 code，否則可能影響 Google Sheet 欄位與後續分析。
+4. 若需修改題目內容，建議先另存新版再上線。
+
+【五、Google Apps Script】
+1. 若只修改 SURVEY_OPEN、年度文字或前端版面，通常不需要重新部署 Apps Script。
+2. 若修改資料欄位、送出格式、工作表名稱或後端處理方式，才需要同步修改 Code.gs。
+3. 修改 Code.gs 後記得建立新版本並重新 Deploy。
+4. Web App URL 若可沿用，盡量不要更換，以避免前端連結失效。
+
+【六、正式上線前測試】
+每次重新開放問卷前至少確認：
+1. 電腦版顯示正常。
+2. 手機版顯示正常。
+3. 所有題目皆可作答。
+4. 必填題未填時會正確提醒。
+5. 問卷可成功送出。
+6. Google Sheet 有完整收到資料。
+7. 感謝頁正常顯示。
+8. 防重複填答功能正常。
+9. 若設定 SURVEY_OPEN=false，確認無法再進入正式問卷。
+
+【七、備份】
+1. 每次大幅修改前，先保留上一版 stakeholder.html。
+2. 建議檔名加日期或版本，例如：
+   stakeholder_115_final.html
+   stakeholder_116_v1.html
+3. 不要只保留 GitHub 上的唯一版本，以免誤覆蓋後難以回復。
+
+【八、最重要的三個設定】
+重新開放新年度問卷時，務必再次確認：
+
+SURVEY_OPEN
+SURVEY_VERSION
+submitKey
+
+這三項是問卷是否開放、資料屬於哪一年度，以及使用者是否能重新填答的主要控制設定。
